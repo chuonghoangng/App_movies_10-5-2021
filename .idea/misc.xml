@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/chuong/LAP TRINH TREN THIET BI DI DONG(ANDROID)/AppMovies/app/src/main/res/drawable/default_indicator.xml" value="0.2203125" />
+        <entry key="..\:/chuong/LAP TRINH TREN THIET BI DI DONG(ANDROID)/AppMovies/app/src/main/res/drawable/gradient_bg.xml" value="0.1787037037037037" />
+        <entry key="..\:/chuong/LAP TRINH TREN THIET BI DI DONG(ANDROID)/AppMovies/app/src/main/res/drawable/ic_baseline_play_arrow_24.xml" value="0.16458333333333333" />
+        <entry key="..\:/chuong/LAP TRINH TREN THIET BI DI DONG(ANDROID)/AppMovies/app/src/main/res/drawable/indicator_selected.xml" value="0.2203125" />
+        <entry key="..\:/chuong/LAP TRINH TREN THIET BI DI DONG(ANDROID)/AppMovies/app/src/main/res/drawable/outline_search_24.xml" value="0.1787037037037037" />
+        <entry key="..\:/chuong/LAP TRINH TREN THIET BI DI DONG(ANDROID)/AppMovies/app/src/main/res/drawable/selected_indicator.xml" value="0.2203125" />
+        <entry key="..\:/chuong/LAP TRINH TREN THIET BI DI DONG(ANDROID)/AppMovies/app/src/main/res/layout/activity_main.xml" value="0.25" />
+        <entry key="..\:/chuong/LAP TRINH TREN THIET BI DI DONG(ANDROID)/AppMovies/app/src/main/res/layout/activity_movie_detail.xml" value="0.22" />
+        <entry key="..\:/chuong/LAP TRINH TREN THIET BI DI DONG(ANDROID)/AppMovies/app/src/main/res/layout/item_movie.xml" value="0.33" />
+        <entry key="..\:/chuong/LAP TRINH TREN THIET BI DI DONG(ANDROID)/AppMovies/app/src/main/res/layout/slide_item.xml" value="0.33" />
+        <entry key="..\:/chuong/LAP TRINH TREN THIET BI DI DONG(ANDROID)/AppMovies/app/src/main/res/menu/options_menu.xml" value="0.33" />
+        <entry key="..\:/chuong/LAP TRINH TREN THIET BI DI DONG(ANDROID)/AppMovies/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.1787037037037037" />
+      </map>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" default="true" project-jdk-name="1.8" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/build/classes" />
+  </component>
+  <component name="ProjectType">
+    <option name="id" value="Android" />
+  </component>
+</project>
