@@ -1,4 +1,4 @@
-package chuong.example.movieapp;
+package chuong.example.movieapp.Movies_cu;
 
 
 import android.content.Context;
@@ -11,7 +11,11 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.squareup.picasso.Picasso;
+
 import java.util.List;
+
+import chuong.example.movieapp.R;
 
 public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MyViewHolder> {
     Context context;
@@ -36,7 +40,13 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MyViewHolder
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder myViewHolder, int i) {
         myViewHolder.TvTitle.setText(mData.get(i).getTitle());
-        myViewHolder.ImgMovie.setImageResource(mData.get(i).getThumbmail());
+        //myViewHolder.ImgMovie.setImageResource(mData.get(i).getThumbmail());
+        if (mData.get(i).getThumbmail().isEmpty()) {
+            myViewHolder.ImgMovie.setImageResource(R.drawable.anh1);
+        } else{
+            Picasso.get().load(mData.get(i).getThumbmail()).into(myViewHolder.ImgMovie);
+        }
+
     }
 
     @Override

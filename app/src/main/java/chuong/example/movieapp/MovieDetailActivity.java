@@ -29,17 +29,21 @@ public class MovieDetailActivity extends AppCompatActivity {
         play_fab=findViewById(R.id.play_fab);
         //get the data
         String movieTitle = getIntent().getExtras().getString("title");
-        int imageResourceId=getIntent().getExtras().getInt("imgURL");
-        int imagecover=getIntent().getExtras().getInt("imgCover");
+        String imageResourceId=getIntent().getExtras().getString("imgURL");
+        String imagecover=getIntent().getExtras().getString("imgCover");
+        String decription=getIntent().getExtras().getString("decription");
+        String streaminglink=getIntent().getExtras().getString("streaminglink");
         MovieThumbnailImg = findViewById(R.id.detail_movie_img);
         Glide.with(this).load(imageResourceId).into(MovieThumbnailImg);
 
-        MovieThumbnailImg.setImageResource(imageResourceId);
+        //MovieThumbnailImg.setImageResource(imageResourceId);
+
         MovieCoverImg=findViewById(R.id.detail_movie_cover);
         Glide.with(this).load(imagecover).into(MovieCoverImg);
         tv_title=findViewById(R.id.detail_movie_title);
         tv_description=findViewById(R.id.detail_movie_desc);
         tv_title.setText(movieTitle);
+        tv_description.setText(decription);
         getSupportActionBar().setTitle(movieTitle);
         //set up animetion
         MovieCoverImg.setAnimation(AnimationUtils.loadAnimation(this,R.anim.scale_animation));

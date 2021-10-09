@@ -15,7 +15,6 @@ import com.squareup.picasso.Picasso;
 import java.util.List;
 
 import chuong.example.movieapp.R;
-import chuong.example.movieapp.Slide;
 
 public class SlideMovieAdapter extends PagerAdapter {
     Context mContext;

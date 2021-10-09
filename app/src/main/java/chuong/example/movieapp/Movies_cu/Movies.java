@@ -1,34 +1,23 @@
-package chuong.example.movieapp;
+package chuong.example.movieapp.Movies_cu;
 
 public class Movies {
     private String title;
     private String decription;
-    private int thumbmail;
+    private String thumbmail;
     private String studio;
     private String rating;
     private String streaminglink;
-    private int converphoto;
-    public Movies(String title, int thumbmail, int converphoto) {
-        this.title = title;
-        this.thumbmail = thumbmail;
-        this.converphoto = converphoto;
+    private String converphoto;
+
+    public Movies() {
     }
 
-    public Movies(String title, String decription, int thumbmail, String studio, String rating, String streaminglink) {
+    public Movies(String title, String decription, String thumbmail, String converphoto, String streaminglink) {
         this.title = title;
         this.decription = decription;
         this.thumbmail = thumbmail;
-        this.studio = studio;
-        this.rating = rating;
         this.streaminglink = streaminglink;
-    }
-
-    public Movies(String title, int thumbmail) {
-        this.title = title;
-        this.thumbmail = thumbmail;
-    }
-
-    public Movies() {
+        this.converphoto = converphoto;
     }
 
     public String getTitle() {
@@ -47,11 +36,11 @@ public class Movies {
         this.decription = decription;
     }
 
-    public int getThumbmail() {
+    public String getThumbmail() {
         return thumbmail;
     }
 
-    public void setThumbmail(int thumbmail) {
+    public void setThumbmail(String thumbmail) {
         this.thumbmail = thumbmail;
     }
 
@@ -78,11 +67,12 @@ public class Movies {
     public void setStreaminglink(String streaminglink) {
         this.streaminglink = streaminglink;
     }
-    public int getConverphoto() {
+
+    public String getConverphoto() {
         return converphoto;
     }
 
-    public void setConverphoto(int converphoto) {
+    public void setConverphoto(String converphoto) {
         this.converphoto = converphoto;
     }
 }

@@ -1,4 +1,4 @@
-package chuong.example.movieapp;
+package chuong.example.movieapp.Slider_Cu;
 
 public class Slide {
     private int Image;

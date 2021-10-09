@@ -1,4 +1,4 @@
-package chuong.example.movieapp;
+package chuong.example.movieapp.Movies_cu;
 
 import android.widget.ImageView;
 

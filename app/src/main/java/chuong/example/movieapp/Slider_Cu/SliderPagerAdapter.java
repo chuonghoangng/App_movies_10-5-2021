@@ -1,4 +1,4 @@
-package chuong.example.movieapp;
+package chuong.example.movieapp.Slider_Cu;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -11,6 +11,8 @@ import androidx.annotation.NonNull;
 import androidx.viewpager.widget.PagerAdapter;
 
 import java.util.List;
+
+import chuong.example.movieapp.R;
 
 public class SliderPagerAdapter extends PagerAdapter {
     Context mContext;
