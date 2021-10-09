@@ -1,8 +1,12 @@
-package chuong.example.movieapp;
+package chuong.example.movieapp.Activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.ActivityOptions;
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
@@ -10,6 +14,8 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
+import chuong.example.movieapp.R;
 
 public class MovieDetailActivity extends AppCompatActivity {
 
@@ -48,6 +54,18 @@ public class MovieDetailActivity extends AppCompatActivity {
         //set up animetion
         MovieCoverImg.setAnimation(AnimationUtils.loadAnimation(this,R.anim.scale_animation));
         play_fab.setAnimation(AnimationUtils.loadAnimation(this,R.anim.scale_animation));
+
+
+
+        MovieCoverImg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //truyen id movie sang trang phat video
+                Intent intent = new Intent(MovieDetailActivity.this, XemMovie.class);
+                intent.putExtra("streaminglink",streaminglink);
+                startActivity(intent);
+            }
+        });
 
 
     }

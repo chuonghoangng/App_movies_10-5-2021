@@ -1,4 +1,4 @@
-package chuong.example.movieapp;
+package chuong.example.movieapp.Activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -34,6 +34,7 @@ import chuong.example.movieapp.ListIDMovies.IDMovies;
 import chuong.example.movieapp.Movies_cu.MovieAdapter;
 import chuong.example.movieapp.Movies_cu.MovieItemClickListener;
 import chuong.example.movieapp.Movies_cu.Movies;
+import chuong.example.movieapp.R;
 import chuong.example.movieapp.SlideMovies.SlideMovie;
 import chuong.example.movieapp.SlideMovies.SlideMovieAdapter;
 import chuong.example.movieapp.Slider_Cu.Slide;
@@ -66,7 +67,6 @@ public class MainActivity extends AppCompatActivity implements MovieItemClickLis
         MoviesRV=findViewById(R.id.Rv_movies);
 
         CreateMoviesViewPager();
-
         CreateRyclyView();
 
 
@@ -181,7 +181,7 @@ public class MainActivity extends AppCompatActivity implements MovieItemClickLis
 
     @Override
     public void onMoviesClick(Movies movie, ImageView movieImageView) {
-        Intent intent = new Intent(this,MovieDetailActivity.class);
+        Intent intent = new Intent(this, MovieDetailActivity.class);
         //set movie infomat to the
         intent.putExtra("title",movie.getTitle());
         intent.putExtra("imgURL",movie.getThumbmail());
@@ -235,15 +235,7 @@ public class MainActivity extends AppCompatActivity implements MovieItemClickLis
         //tao trang hien thi danh sach phim
 
         lstMovies = new ArrayList<>();
-        /*
-        lstMovies.add(new Movies("The Thor 5",R.drawable.movies,R.drawable.anh1));
-        lstMovies.add(new Movies("Netfix",R.drawable.anhphim2,R.drawable.anh2));
-        lstMovies.add(new Movies("pokemon phần 5",R.drawable.pokemon,R.drawable.uoc_mo_3));
-        lstMovies.add(new Movies("Biệt Đội Cảm Tử",R.drawable.anhphim,R.drawable.anh1));
-        lstMovies.add(new Movies("The Thor 5",R.drawable.movies,R.drawable.anh2));
-        lstMovies.add(new Movies("Netfix",R.drawable.anhphim2,R.drawable.anh3));
-        lstMovies.add(new Movies("pokemon phần 5",R.drawable.pokemon,R.drawable.uoc_mo_3));
-        */
+
         movieAdapter = new MovieAdapter(this,lstMovies,this);
         getJsonMovies(get_Movies);
         MoviesRV.setAdapter(movieAdapter);
@@ -252,7 +244,6 @@ public class MainActivity extends AppCompatActivity implements MovieItemClickLis
     private  void CreateMoviesViewPager()
     {
         //tao danh sach slide Movies
-
         lstSlideMovies=new ArrayList<>();
         //gan vao adapter
         adapterSlideMovies=new SlideMovieAdapter(this,lstSlideMovies);
@@ -260,7 +251,6 @@ public class MainActivity extends AppCompatActivity implements MovieItemClickLis
         getJsonSlider(get_new);
         //gan vao slide Pager
         sliderPager.setAdapter(adapterSlideMovies);
-
         //setup time
         Timer timer = new Timer();
         timer.scheduleAtFixedRate(new MainActivity.SliderTimer(),4000,6000);
