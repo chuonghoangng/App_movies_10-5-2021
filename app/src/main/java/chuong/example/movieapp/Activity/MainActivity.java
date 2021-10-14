@@ -1,12 +1,15 @@
 package chuong.example.movieapp.Activity;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
 import android.app.ActivityOptions;
+import android.app.SearchManager;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -54,6 +57,7 @@ public class MainActivity extends AppCompatActivity implements MovieItemClickLis
     List<Movies> lstMovies,listMoviesCategory ;
     MovieAdapter movieAdapter;
     MovieCategoryAdapter movieAdapterCategory;
+    SearchView searchView;
     IDMovies idMovies = new IDMovies();
 
 
@@ -190,6 +194,24 @@ public class MainActivity extends AppCompatActivity implements MovieItemClickLis
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.options_menu, menu);
+        SearchManager searchManager =(SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        searchView =(SearchView) menu.findItem(R.id.search).getActionView();
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+        searchView.setMaxWidth(Integer.MAX_VALUE);
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                movieAdapter.getFilter().filter(query);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                movieAdapter.getFilter().filter(newText);
+                return false;
+            }
+        });
         return true;
     }
 
