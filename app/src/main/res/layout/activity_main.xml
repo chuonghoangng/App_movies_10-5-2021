@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,46 +7,99 @@
     tools:context=".Activity.MainActivity"
     android:background="@color/colorPrimary"
     android:orientation="vertical">
-
-    <androidx.viewpager.widget.ViewPager
-        android:layout_margin="2dp"
-        android:id="@+id/sldier_pager"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="275dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="SpeakableTextPresentCheck" />
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-    <com.google.android.material.tabs.TabLayout
-        android:id="@+id/indicator"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/colorPrimary"
-        app:tabBackground="@drawable/indicator_selected"
-        app:tabGravity="center"
-        app:tabIndicatorHeight="0dp"
-        tools:ignore="SpeakableTextPresentCheck">
+        <androidx.viewpager.widget.ViewPager
+            android:layout_margin="2dp"
+            android:id="@+id/sldier_pager"
+            android:layout_width="match_parent"
+            android:layout_height="275dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="SpeakableTextPresentCheck" />
 
-
-    </com.google.android.material.tabs.TabLayout>
-
-    <TextView
-        android:paddingLeft="10dp"
-        android:id="@+id/textView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="DANH SACH PHIM"
-
-        android:textColor="@color/white"/>
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/Rv_movies"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="6dp"
-        android:layout_marginRight="8dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/indicator"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimary"
+            app:tabBackground="@drawable/indicator_selected"
+            app:tabGravity="center"
+            app:tabIndicatorHeight="0dp"
+            tools:ignore="SpeakableTextPresentCheck">
 
 
-</LinearLayout>
+        </com.google.android.material.tabs.TabLayout>
+
+        <TextView
+            android:paddingLeft="10dp"
+            android:id="@+id/textView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="DANH SACH PHIM"
+
+            android:textColor="@color/white"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/Rv_movies"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="6dp"
+            android:layout_marginRight="8dp">
+
+        </androidx.recyclerview.widget.RecyclerView>
+
+        <com.google.android.material.tabs.TabLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/black"
+            app:tabTextColor="@color/white">
+
+            <com.google.android.material.tabs.TabItem
+                android:id="@+id/tblTV"
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="TV" />
+
+            <com.google.android.material.tabs.TabItem
+                android:id="@+id/tblVideo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="video" />
+
+            <com.google.android.material.tabs.TabItem
+                android:id="@+id/tblMovie"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Movie" />
+            <com.google.android.material.tabs.TabItem
+                android:id="@+id/tblAnime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Anime" />
+
+        </com.google.android.material.tabs.TabLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/Rv_TheLoai"
+            android:layout_width="match_parent"
+            android:layout_height="450dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="6dp"
+            android:layout_marginRight="8dp">
+
+        </androidx.recyclerview.widget.RecyclerView>
+
+
+    </LinearLayout>
+
+
+
+
+</androidx.core.widget.NestedScrollView>

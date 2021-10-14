@@ -1,6 +1,7 @@
 package chuong.example.movieapp.Activity;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
@@ -19,6 +20,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.android.material.tabs.TabItem;
 import com.google.android.material.tabs.TabLayout;
 
 import org.json.JSONArray;
@@ -32,6 +34,7 @@ import java.util.TimerTask;
 
 import chuong.example.movieapp.ListIDMovies.IDMovies;
 import chuong.example.movieapp.Movies_cu.MovieAdapter;
+import chuong.example.movieapp.Movies_cu.MovieCategoryAdapter;
 import chuong.example.movieapp.Movies_cu.MovieItemClickListener;
 import chuong.example.movieapp.Movies_cu.Movies;
 import chuong.example.movieapp.R;
@@ -45,11 +48,15 @@ public class MainActivity extends AppCompatActivity implements MovieItemClickLis
     private ArrayList<SlideMovie> lstSlideMovies;
     private ViewPager sliderPager;
     private TabLayout indicator;
-    private RecyclerView MoviesRV;
+    private RecyclerView MoviesRV,MoviesRVCategory;
+    private TabItem tblTv,tblMovie,tblAnime,tblVideo;
     SlideMovieAdapter adapterSlideMovies;
-    List<Movies> lstMovies ;
+    List<Movies> lstMovies,listMoviesCategory ;
     MovieAdapter movieAdapter;
+    MovieCategoryAdapter movieAdapterCategory;
     IDMovies idMovies = new IDMovies();
+
+
 
     public static String Api_key="AIzaSyB7hA1R7YLrHQERL1J2IAtCbWijLvovrQA";
     public static String Api_Web="https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId=";
@@ -65,9 +72,16 @@ public class MainActivity extends AppCompatActivity implements MovieItemClickLis
         sliderPager=findViewById(R.id.sldier_pager);
         indicator = findViewById(R.id.indicator);
         MoviesRV=findViewById(R.id.Rv_movies);
+        MoviesRVCategory= findViewById(R.id.Rv_TheLoai);
+        tblMovie=findViewById(R.id.tblMovie);
+        tblTv=findViewById(R.id.tblTV);
+        tblAnime=findViewById(R.id.tblAnime);
+        tblVideo=findViewById(R.id.tblAnime);
+
 
         CreateMoviesViewPager();
         CreateRyclyView();
+        CreateRyclyViewCayegory(get_Movies);
 
 
         
@@ -122,7 +136,7 @@ public class MainActivity extends AppCompatActivity implements MovieItemClickLis
         requestQueue.add(jsonObjectRequest);
     }
 
-    private void getJsonMovies(String Url){
+    private void getJsonMovies(String Url,List<Movies> lstMovies,MovieAdapter movieAdapter){
         RequestQueue requestQueue= Volley.newRequestQueue(this);
         JsonObjectRequest jsonObjectRequest=new JsonObjectRequest(Request.Method.GET, Url, null,
                 new Response.Listener<JSONObject>() {
@@ -212,33 +226,16 @@ public class MainActivity extends AppCompatActivity implements MovieItemClickLis
             });
         }
     }
-    private  void CreateViewPager(){
 
-        lstSlides= new ArrayList<>();
-        lstSlides.add(new Slide(R.drawable.movies,"The Thor 5"));
-        lstSlides.add(new Slide(R.drawable.anhphim2,"Netfix"));
-        lstSlides.add(new Slide(R.drawable.pokemon,"pokemon phần 5"));
-        lstSlides.add(new Slide(R.drawable.anhphim,"Biệt Đội Cảm Tử"));
-
-        SliderPagerAdapter adapter=new SliderPagerAdapter(this,lstSlides);
-
-        sliderPager.setAdapter(adapter);
-
-        //setup time
-        Timer timer = new Timer();
-        timer.scheduleAtFixedRate(new MainActivity.SliderTimer(),4000,6000);
-        indicator.setupWithViewPager(sliderPager,true);
-
-
-    }
     private  void CreateRyclyView() {
         //tao trang hien thi danh sach phim
 
         lstMovies = new ArrayList<>();
 
-        movieAdapter = new MovieAdapter(this,lstMovies,this);
-        getJsonMovies(get_Movies);
+        movieAdapter = new MovieAdapter(this,lstMovies,this,R.layout.item_movie);
+        getJsonMovies(get_Movies,lstMovies,movieAdapter);
         MoviesRV.setAdapter(movieAdapter);
+        RecyclerView.ItemDecoration itemDecoration = new DividerItemDecoration(this,DividerItemDecoration.HORIZONTAL);
         MoviesRV.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false));
     }
     private  void CreateMoviesViewPager()
@@ -257,6 +254,67 @@ public class MainActivity extends AppCompatActivity implements MovieItemClickLis
         indicator.setupWithViewPager(sliderPager,true);
     }
 
+    private  void CreateRyclyViewCayegory(String Url ) {
+        //tao trang hien thi danh sach phim
+
+        listMoviesCategory = new ArrayList<>();
+
+        movieAdapterCategory = new MovieCategoryAdapter(this,listMoviesCategory,this,R.layout.item_moviecategory);
+        getJsonMoviesCategory(Url,listMoviesCategory,movieAdapterCategory);
+        MoviesRVCategory.setAdapter(movieAdapterCategory);
+        RecyclerView.ItemDecoration itemDecoration = new DividerItemDecoration(this,DividerItemDecoration.VERTICAL);
+        MoviesRVCategory.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false));
+    }
+
+    private void getJsonMoviesCategory(String Url,List<Movies> lstMovies,MovieCategoryAdapter movieAdapter){
+        RequestQueue requestQueue= Volley.newRequestQueue(this);
+        JsonObjectRequest jsonObjectRequest=new JsonObjectRequest(Request.Method.GET, Url, null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+
+                        try {
+                            JSONArray jsonItems =response.getJSONArray("items");
+                            String title="";
+                            String url="";
+                            String idvieo="";
+                            String description="";
+                            for (int i=0;i<jsonItems.length();i++) {
+                                JSONObject jsonItem = jsonItems.getJSONObject(i);
+                                JSONObject jsonsnippet = jsonItem.getJSONObject("snippet");
+                                title = jsonsnippet.getString("title");
+
+                                JSONObject jsonThumbnails = jsonsnippet.getJSONObject("thumbnails");
+                                JSONObject jsonMedium = jsonThumbnails.getJSONObject("medium");
+                                url = jsonMedium.getString("url");
+                                JSONObject jsonResouceId = jsonsnippet.getJSONObject("resourceId");
+                                idvieo = jsonResouceId.getString("videoId");
+                                description = jsonsnippet.getString("description");
+                                //Toast.makeText(MainActivity.this, description, Toast.LENGTH_SHORT).show();
+                                lstMovies.add(new Movies(title,description,url,url,idvieo));
+                                //arrayListMovies.add(new MovieYoutube(title,url,idvieo));
+                            }
+                            movieAdapter.notifyDataSetChanged();
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+
+                        //Toast.makeText(MainActivity.this, response.toString(), Toast.LENGTH_SHORT).show();
+
+
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(MainActivity.this, "Loi", Toast.LENGTH_SHORT).show();
+                    }
+                }
+        );
+        requestQueue.add(jsonObjectRequest);
+    }
 
 
 }
