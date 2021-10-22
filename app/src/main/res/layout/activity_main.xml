@@ -113,13 +113,25 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="Movie" />
+
         </LinearLayout>
+        <TextView
+            android:padding="5dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/txtCategory"
+            android:text="ANIME"
+            android:textSize="25dp"
+            android:textColor="@color/white"
+            android:gravity="center"
+            android:background="@color/black"
+            ></TextView>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/Rv_TheLoai"
             android:layout_width="match_parent"
             android:layout_height="450dp"
-            android:layout_marginLeft="16dp"
+            android:layout_marginLeft="10dp"
             android:layout_marginTop="6dp"
             android:layout_marginRight="8dp">
 

@@ -17,6 +17,7 @@ import android.view.MenuInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -64,7 +65,7 @@ public class MainActivity extends AppCompatActivity implements MovieItemClickLis
     private RecyclerView MoviesRV,MoviesRVCategory;
     private TabItem tblTv,tblMovie,tblAnime,tblVideo;
     private Button btnAnime,btnMovie;
-
+    private TextView txtcategory;
     SlideMovieAdapter adapterSlideMovies;
     List<Movies> lstMovies,listMoviesCategory ;
     MovieAdapter movieAdapter;
@@ -110,6 +111,8 @@ public class MainActivity extends AppCompatActivity implements MovieItemClickLis
 
         btnAnime.setOnClickListener(this);
         btnMovie.setOnClickListener(this);
+
+        txtcategory=findViewById(R.id.txtCategory);
 
         tblMovie=findViewById(R.id.tblMovie);
         tblTv=findViewById(R.id.tblTV);
@@ -269,14 +272,14 @@ public class MainActivity extends AppCompatActivity implements MovieItemClickLis
 
             case R.id.btnMovie:
             {
-
+                txtcategory.setText("MOVIE");
                 CreateRyclyViewCayegory("new");
             }
             break;
 
             case R.id.btnAnime:
             {
-
+                txtcategory.setText("ANIME");
                 CreateRyclyViewCayegory("anime");
             }
             break;

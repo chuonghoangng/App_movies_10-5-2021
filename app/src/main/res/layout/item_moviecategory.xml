@@ -22,7 +22,7 @@
         tools:ignore="VectorDrawableCompat" />
 
     <TextView
-        android:layout_marginLeft="5dp"
+        android:layout_marginLeft="10dp"
         android:padding="5dp"
         android:id="@+id/item_movie_title_category"
         android:layout_width="175dp"
