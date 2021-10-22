@@ -14,6 +14,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -23,6 +25,8 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.lib.InterfaceRepository.Methods;
+import com.example.lib.Model.MovieModel;
 import com.google.android.material.tabs.TabItem;
 import com.google.android.material.tabs.TabLayout;
 
@@ -45,14 +49,22 @@ import chuong.example.movieapp.SlideMovies.SlideMovie;
 import chuong.example.movieapp.SlideMovies.SlideMovieAdapter;
 import chuong.example.movieapp.Slider_Cu.Slide;
 import chuong.example.movieapp.Slider_Cu.SliderPagerAdapter;
+import retrofit2.Call;
+import retrofit2.Callback;
 
-public class MainActivity extends AppCompatActivity implements MovieItemClickListener {
+
+import static com.example.lib.RetrofitClient.getRetrofit;
+
+
+public class MainActivity extends AppCompatActivity implements MovieItemClickListener, View.OnClickListener {
     private List<Slide> lstSlides;
     private ArrayList<SlideMovie> lstSlideMovies;
     private ViewPager sliderPager;
     private TabLayout indicator;
     private RecyclerView MoviesRV,MoviesRVCategory;
     private TabItem tblTv,tblMovie,tblAnime,tblVideo;
+    private Button btnAnime,btnMovie;
+
     SlideMovieAdapter adapterSlideMovies;
     List<Movies> lstMovies,listMoviesCategory ;
     MovieAdapter movieAdapter;
@@ -73,22 +85,39 @@ public class MainActivity extends AppCompatActivity implements MovieItemClickLis
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         //anh xa
+        anhxa();
+
+
+        //hien thi danh sach viewpager
+        CreateMoviesViewPager();
+        //hien danh sach phim
+        CreateRyclyView();
+        //hien danh sach phim theo the loai
+        CreateRyclyViewCayegory("new");
+
+
+        
+    }
+    private void anhxa()
+    {
         sliderPager=findViewById(R.id.sldier_pager);
         indicator = findViewById(R.id.indicator);
         MoviesRV=findViewById(R.id.Rv_movies);
         MoviesRVCategory= findViewById(R.id.Rv_TheLoai);
+
+        btnAnime=findViewById(R.id.btnAnime);
+        btnMovie=findViewById(R.id.btnMovie);
+
+        btnAnime.setOnClickListener(this);
+        btnMovie.setOnClickListener(this);
+
         tblMovie=findViewById(R.id.tblMovie);
         tblTv=findViewById(R.id.tblTV);
         tblAnime=findViewById(R.id.tblAnime);
         tblVideo=findViewById(R.id.tblAnime);
 
 
-        CreateMoviesViewPager();
-        CreateRyclyView();
-        CreateRyclyViewCayegory(get_Movies);
 
-
-        
     }
     private void getJsonSlider(String Url){
         RequestQueue requestQueue= Volley.newRequestQueue(this);
@@ -232,6 +261,29 @@ public class MainActivity extends AppCompatActivity implements MovieItemClickLis
 
     }
 
+    @Override
+    public void onClick(View view) {
+        switch (view.getId())
+        {
+
+
+            case R.id.btnMovie:
+            {
+
+                CreateRyclyViewCayegory("new");
+            }
+            break;
+
+            case R.id.btnAnime:
+            {
+
+                CreateRyclyViewCayegory("anime");
+            }
+            break;
+
+        }
+    }
+
     class SliderTimer extends TimerTask {
 
         @Override
@@ -253,9 +305,9 @@ public class MainActivity extends AppCompatActivity implements MovieItemClickLis
         //tao trang hien thi danh sach phim
 
         lstMovies = new ArrayList<>();
-
         movieAdapter = new MovieAdapter(this,lstMovies,this,R.layout.item_movie);
-        getJsonMovies(get_Movies,lstMovies,movieAdapter);
+        //getJsonMovies(get_Movies,lstMovies,movieAdapter);
+        getMovies(lstMovies,movieAdapter);
         MoviesRV.setAdapter(movieAdapter);
         RecyclerView.ItemDecoration itemDecoration = new DividerItemDecoration(this,DividerItemDecoration.HORIZONTAL);
         MoviesRV.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false));
@@ -276,13 +328,14 @@ public class MainActivity extends AppCompatActivity implements MovieItemClickLis
         indicator.setupWithViewPager(sliderPager,true);
     }
 
-    private  void CreateRyclyViewCayegory(String Url ) {
+    private  void CreateRyclyViewCayegory(String theloai) {
         //tao trang hien thi danh sach phim
 
         listMoviesCategory = new ArrayList<>();
 
         movieAdapterCategory = new MovieCategoryAdapter(this,listMoviesCategory,this,R.layout.item_moviecategory);
-        getJsonMoviesCategory(Url,listMoviesCategory,movieAdapterCategory);
+        //getJsonMoviesCategory(Url,listMoviesCategory,movieAdapterCategory);
+        getMovies(theloai,listMoviesCategory,movieAdapterCategory);
         MoviesRVCategory.setAdapter(movieAdapterCategory);
         RecyclerView.ItemDecoration itemDecoration = new DividerItemDecoration(this,DividerItemDecoration.VERTICAL);
         MoviesRVCategory.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false));
@@ -336,6 +389,71 @@ public class MainActivity extends AppCompatActivity implements MovieItemClickLis
                 }
         );
         requestQueue.add(jsonObjectRequest);
+    }
+
+    public void getMovies(List<Movies> lstMovies,MovieAdapter movieAdapter){
+        Methods methods = getRetrofit().create(Methods.class);
+        Call<MovieModel> call = methods.getMovies();
+        //lstMovies=new ArrayList<>();
+        call.enqueue(new Callback<MovieModel>() {
+            @Override
+            public void onResponse(Call<MovieModel> call, retrofit2.Response<MovieModel> response) {
+
+                MovieModel.Data[] data = response.body().getData();
+                for(MovieModel.Data dt: data){
+
+                    //Movies movies = new Movies();
+                    String title=dt.getTitle();
+                    String description=dt.getDescription();
+                    String url=dt.getUrl().toString();
+                    String idvieo=dt.getIdvieo();
+                    lstMovies.add(new Movies(title,description,url,url,idvieo));
+                    //Toast.makeText(MainActivity.this, url, Toast.LENGTH_SHORT).show();
+                    //textView.append(dt.getId()+dt.getName()+"\n");
+                }
+                movieAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onFailure(Call<MovieModel> call, Throwable t) {
+                Toast.makeText(MainActivity.this, "ERROR", Toast.LENGTH_LONG).show();
+            }
+        });
+
+    }
+    public void getMovies(String theloai,List<Movies> lstMovies,MovieCategoryAdapter movieCategoryAdapter){
+        Methods methods = getRetrofit().create(Methods.class);
+        Call<MovieModel> call = methods.getMovies();
+        //lstMovies=new ArrayList<>();
+        call.enqueue(new Callback<MovieModel>() {
+            @Override
+            public void onResponse(Call<MovieModel> call, retrofit2.Response<MovieModel> response) {
+                Toast.makeText(MainActivity.this, "SUCCESS", Toast.LENGTH_LONG).show();
+                MovieModel.Data[] data = response.body().getData();
+                for(MovieModel.Data dt: data){
+                    String category=dt.getTheloai();
+                    if(theloai.equals(category)){
+                        String title=dt.getTitle();
+                        String description=dt.getDescription();
+                        String url=dt.getUrl().toString();
+                        String idvieo=dt.getIdvieo();
+                        lstMovies.add(new Movies(title,description,url,url,idvieo));
+                        //Toast.makeText(MainActivity.this, url, Toast.LENGTH_SHORT).show();
+                    }
+
+                    //Movies movies = new Movies();
+
+                    //textView.append(dt.getId()+dt.getName()+"\n");
+                }
+                movieCategoryAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onFailure(Call<MovieModel> call, Throwable t) {
+                Toast.makeText(MainActivity.this, "ERROR", Toast.LENGTH_LONG).show();
+            }
+        });
+
     }
 
 
