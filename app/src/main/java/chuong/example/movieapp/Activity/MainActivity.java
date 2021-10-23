@@ -94,7 +94,7 @@ public class MainActivity extends AppCompatActivity implements MovieItemClickLis
         //hien danh sach phim
         CreateRyclyView();
         //hien danh sach phim theo the loai
-        CreateRyclyViewCayegory("new");
+        CreateRyclyViewCayegory("anime");
 
 
         
@@ -281,6 +281,19 @@ public class MainActivity extends AppCompatActivity implements MovieItemClickLis
             {
                 txtcategory.setText("ANIME");
                 CreateRyclyViewCayegory("anime");
+            }
+            break;
+            case R.id.btnVideo:
+            {
+                txtcategory.setText("VIDEO");
+                //CreateRyclyViewCayegory("new");
+            }
+            break;
+
+            case R.id.btn:
+            {
+                txtcategory.setText("OOO");
+                //CreateRyclyViewCayegory("anime");
             }
             break;
 
