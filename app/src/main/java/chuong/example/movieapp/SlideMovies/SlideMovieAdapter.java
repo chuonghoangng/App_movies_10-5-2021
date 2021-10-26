@@ -14,13 +14,14 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
+import chuong.example.movieapp.Movies_cu.Movies;
 import chuong.example.movieapp.R;
 
 public class SlideMovieAdapter extends PagerAdapter {
     Context mContext;
-    List<SlideMovie> mList;
+    List<Movies> mList;
 
-    public SlideMovieAdapter(Context mContext, List<SlideMovie> mList) {
+    public SlideMovieAdapter(Context mContext, List<Movies> mList) {
         this.mContext = mContext;
         this.mList = mList;
     }
@@ -39,7 +40,7 @@ public class SlideMovieAdapter extends PagerAdapter {
 
         //slideImg.setImageResource(mList.get(position).getImage());
         slideText.setText(mList.get(position).getTitle());
-        Picasso.get().load(mList.get(position).getImage()).into(slideImg);
+        Picasso.get().load(mList.get(position).getThumbmail()).into(slideImg);
 
         container.addView(slideLayout);
         return slideLayout;
@@ -59,4 +60,5 @@ public class SlideMovieAdapter extends PagerAdapter {
     public void destroyItem(@NonNull ViewGroup container, int position, @NonNull Object object) {
         container.removeView((View) object);
     }
+
 }

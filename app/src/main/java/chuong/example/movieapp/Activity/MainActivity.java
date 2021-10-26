@@ -58,16 +58,17 @@ import static com.example.lib.RetrofitClient.getRetrofit;
 
 
 public class MainActivity extends AppCompatActivity implements MovieItemClickListener, View.OnClickListener {
-    private List<Slide> lstSlides;
+
+    //private List<Slide> lstSlides;
     private ArrayList<SlideMovie> lstSlideMovies;
     private ViewPager sliderPager;
     private TabLayout indicator;
     private RecyclerView MoviesRV,MoviesRVCategory;
     private TabItem tblTv,tblMovie,tblAnime,tblVideo;
-    private Button btnAnime,btnMovie;
+    private Button btnAnime,btnChina,btnMy,btnVN;
     private TextView txtcategory;
     SlideMovieAdapter adapterSlideMovies;
-    List<Movies> lstMovies,listMoviesCategory ;
+    List<Movies> lstMovies,listMoviesCategory,lstSlidesmovie ;
     MovieAdapter movieAdapter;
     MovieCategoryAdapter movieAdapterCategory;
     SearchView searchView;
@@ -97,6 +98,7 @@ public class MainActivity extends AppCompatActivity implements MovieItemClickLis
         CreateRyclyViewCayegory("anime");
 
 
+
         
     }
     private void anhxa()
@@ -107,10 +109,14 @@ public class MainActivity extends AppCompatActivity implements MovieItemClickLis
         MoviesRVCategory= findViewById(R.id.Rv_TheLoai);
 
         btnAnime=findViewById(R.id.btnAnime);
-        btnMovie=findViewById(R.id.btnMovie);
+        btnChina=findViewById(R.id.btnChina);
+        btnMy=findViewById(R.id.btnUSA);
+        btnVN=findViewById(R.id.btnVN);
 
         btnAnime.setOnClickListener(this);
-        btnMovie.setOnClickListener(this);
+        btnChina.setOnClickListener(this);
+        btnMy.setOnClickListener(this);
+        btnVN.setOnClickListener(this);
 
         txtcategory=findViewById(R.id.txtCategory);
 
@@ -147,7 +153,7 @@ public class MainActivity extends AppCompatActivity implements MovieItemClickLis
                                 idvieo = jsonResouceId.getString("videoId");
                                 description = jsonsnippet.getString("description");
                                 //Toast.makeText(MainActivity.this, description, Toast.LENGTH_SHORT).show();
-                                lstSlideMovies.add(new SlideMovie(title,url));
+                                lstSlidesmovie.add(new Movies(title,description,url,url,idvieo));
                                 //arrayListMovies.add(new MovieYoutube(title,url,idvieo));
                             }
                             adapterSlideMovies.notifyDataSetChanged();
@@ -270,9 +276,9 @@ public class MainActivity extends AppCompatActivity implements MovieItemClickLis
         {
 
 
-            case R.id.btnMovie:
+            case R.id.btnChina:
             {
-                txtcategory.setText("MOVIE");
+                txtcategory.setText("CHINA");
                 CreateRyclyViewCayegory("new");
             }
             break;
@@ -283,17 +289,17 @@ public class MainActivity extends AppCompatActivity implements MovieItemClickLis
                 CreateRyclyViewCayegory("anime");
             }
             break;
-            case R.id.btnVideo:
+            case R.id.btnUSA:
             {
-                txtcategory.setText("VIDEO");
-                //CreateRyclyViewCayegory("new");
+                txtcategory.setText("MY");
+                CreateRyclyViewCayegory("USA");
             }
             break;
 
-            case R.id.btn:
+            case R.id.btnVN:
             {
-                txtcategory.setText("OOO");
-                //CreateRyclyViewCayegory("anime");
+                txtcategory.setText("VIET NAM");
+                CreateRyclyViewCayegory("VN");
             }
             break;
 
@@ -307,7 +313,7 @@ public class MainActivity extends AppCompatActivity implements MovieItemClickLis
             MainActivity.this.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    if(sliderPager.getCurrentItem()<lstSlideMovies.size()-1)
+                    if(sliderPager.getCurrentItem()<lstSlidesmovie.size()-1)
                         sliderPager.setCurrentItem(sliderPager.getCurrentItem()+1);
                     else{
                         sliderPager.setCurrentItem(0);
@@ -331,11 +337,13 @@ public class MainActivity extends AppCompatActivity implements MovieItemClickLis
     private  void CreateMoviesViewPager()
     {
         //tao danh sach slide Movies
-        lstSlideMovies=new ArrayList<>();
+        //lstSlideMovies=new ArrayList<>();
+        lstSlidesmovie=new ArrayList<>();
         //gan vao adapter
-        adapterSlideMovies=new SlideMovieAdapter(this,lstSlideMovies);
+        adapterSlideMovies=new SlideMovieAdapter(this,lstSlidesmovie);
         //them vao Json
-        getJsonSlider(get_new);
+        //getJsonSlider(get_new);
+        getMovies(4);
         //gan vao slide Pager
         sliderPager.setAdapter(adapterSlideMovies);
         //setup time
@@ -470,6 +478,39 @@ public class MainActivity extends AppCompatActivity implements MovieItemClickLis
             }
         });
 
+    }
+    public void getMovies(int soluong) {
+        Methods methods = getRetrofit().create(Methods.class);
+        Call<MovieModel> call = methods.getMovies();
+        //lstMovies=new ArrayList<>();
+        call.enqueue(new Callback<MovieModel>() {
+            @Override
+            public void onResponse(Call<MovieModel> call, retrofit2.Response<MovieModel> response) {
+
+                MovieModel.Data[] data = response.body().getData();
+                int i=0;
+                for(MovieModel.Data dt: data){
+                    if(i<soluong){
+                        String title=dt.getTitle();
+                        String description=dt.getDescription();
+                        String url=dt.getUrl().toString();
+                        String idvieo=dt.getIdvieo();
+                        lstSlidesmovie.add(new Movies(title,description,url,url,idvieo));
+                        i=i+1;
+                    }
+                    //Movies movies = new Movies();
+
+                    //Toast.makeText(MainActivity.this, url, Toast.LENGTH_SHORT).show();
+                    //textView.append(dt.getId()+dt.getName()+"\n");
+                }
+                adapterSlideMovies.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onFailure(Call<MovieModel> call, Throwable t) {
+                Toast.makeText(MainActivity.this, "ERROR", Toast.LENGTH_LONG).show();
+            }
+        });
     }
 
 

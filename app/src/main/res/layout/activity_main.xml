@@ -108,25 +108,25 @@
                 android:text="Anime" />
             <Button
                 app:backgroundTint="@color/black"
-                android:id="@+id/btnMovie"
+                android:id="@+id/btnChina"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Movie" />
+                android:text="China" />
             <Button
                 app:backgroundTint="@color/black"
-                android:id="@+id/btnVideo"
+                android:id="@+id/btnUSA"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Video" />
+                android:text="MY" />
             <Button
                 app:backgroundTint="@color/black"
-                android:id="@+id/btn"
+                android:id="@+id/btnVN"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="ooo" />
+                android:text="VN" />
 
         </LinearLayout>
         <TextView
