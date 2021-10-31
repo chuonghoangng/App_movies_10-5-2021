@@ -3,6 +3,7 @@ package chuong.example.movieapp.Activity;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
@@ -11,6 +12,7 @@ import android.app.ActivityOptions;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -64,8 +66,8 @@ public class MainActivity extends AppCompatActivity implements MovieItemClickLis
     private ViewPager sliderPager;
     private TabLayout indicator;
     private RecyclerView MoviesRV,MoviesRVCategory;
-    private TabItem tblTv,tblMovie,tblAnime,tblVideo;
-    private Button btnAnime,btnChina,btnMy,btnVN;
+    //private TabItem tblTv,tblMovie,tblAnime,tblVideo;
+    private Button btnAnime,btnChina,btnMy,btnVN,btnIndia;
     private TextView txtcategory;
     SlideMovieAdapter adapterSlideMovies;
     List<Movies> lstMovies,listMoviesCategory,lstSlidesmovie ;
@@ -112,18 +114,20 @@ public class MainActivity extends AppCompatActivity implements MovieItemClickLis
         btnChina=findViewById(R.id.btnChina);
         btnMy=findViewById(R.id.btnUSA);
         btnVN=findViewById(R.id.btnVN);
+        btnIndia=findViewById(R.id.btnIndia);
 
         btnAnime.setOnClickListener(this);
         btnChina.setOnClickListener(this);
         btnMy.setOnClickListener(this);
+        btnIndia.setOnClickListener(this);
         btnVN.setOnClickListener(this);
 
         txtcategory=findViewById(R.id.txtCategory);
 
-        tblMovie=findViewById(R.id.tblMovie);
-        tblTv=findViewById(R.id.tblTV);
-        tblAnime=findViewById(R.id.tblAnime);
-        tblVideo=findViewById(R.id.tblAnime);
+        //tblMovie=findViewById(R.id.tblMovie);
+        //tblTv=findViewById(R.id.tblTV);
+        //tblAnime=findViewById(R.id.tblAnime);
+        //tblVideo=findViewById(R.id.tblAnime);
 
 
 
@@ -291,7 +295,7 @@ public class MainActivity extends AppCompatActivity implements MovieItemClickLis
             break;
             case R.id.btnUSA:
             {
-                txtcategory.setText("MY");
+                txtcategory.setText("AMERICA");
                 CreateRyclyViewCayegory("USA");
             }
             break;
@@ -300,6 +304,11 @@ public class MainActivity extends AppCompatActivity implements MovieItemClickLis
             {
                 txtcategory.setText("VIET NAM");
                 CreateRyclyViewCayegory("VN");
+            }
+            case R.id.btnIndia:
+            {
+                txtcategory.setText("INDIA");
+                CreateRyclyViewCayegory("India");
             }
             break;
 
@@ -362,7 +371,16 @@ public class MainActivity extends AppCompatActivity implements MovieItemClickLis
         getMovies(theloai,listMoviesCategory,movieAdapterCategory);
         MoviesRVCategory.setAdapter(movieAdapterCategory);
         RecyclerView.ItemDecoration itemDecoration = new DividerItemDecoration(this,DividerItemDecoration.VERTICAL);
-        MoviesRVCategory.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false));
+
+        //MoviesRVCategory.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false));
+        Configuration orientation = new Configuration();
+        if(this.MoviesRVCategory.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+            MoviesRVCategory.setLayoutManager(new GridLayoutManager(this, 1));
+        } else if (this.MoviesRVCategory.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            MoviesRVCategory.setLayoutManager(new GridLayoutManager(this, 2));
+        }
+        //connectGetApiData();
+
     }
 
     private void getJsonMoviesCategory(String Url,List<Movies> lstMovies,MovieCategoryAdapter movieAdapter){

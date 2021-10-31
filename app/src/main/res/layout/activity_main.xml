@@ -46,6 +46,7 @@
 
             android:textColor="@color/white"/>
 
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/Rv_movies"
             android:layout_width="match_parent"
@@ -56,77 +57,67 @@
 
         </androidx.recyclerview.widget.RecyclerView>
 
-        <com.google.android.material.tabs.TabLayout
-            android:id="@+id/tablayoutcaegory"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/black"
-            app:tabTextColor="@color/white"
-            app:tabMode="scrollable">
-
-            <com.google.android.material.tabs.TabItem
-                android:id="@+id/tblTV"
-
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="TV" />
-
-            <com.google.android.material.tabs.TabItem
-                android:id="@+id/tblVideo"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="video" />
-
-            <com.google.android.material.tabs.TabItem
-                android:id="@+id/tblMovie"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Movie" />
-            <com.google.android.material.tabs.TabItem
-                android:id="@+id/tblAnime"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Anime" />
-
-
-
-        </com.google.android.material.tabs.TabLayout>
         <LinearLayout
-            android:background="@color/black"
+
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
 
-
             <Button
-                app:backgroundTint="@color/black"
                 android:id="@+id/btnAnime"
-                android:layout_width="0dp"
+
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Anime" />
+                app:cornerRadius="100dp"
+                android:backgroundTint="@color/browser_actions_title_color"
+                android:text="Anime"
+                 />
             <Button
-                app:backgroundTint="@color/black"
+                app:cornerRadius="100dp"
+                android:backgroundTint="@color/browser_actions_title_color"
                 android:id="@+id/btnChina"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="China" />
             <Button
-                app:backgroundTint="@color/black"
+                app:cornerRadius="100dp"
+                android:backgroundTint="@color/browser_actions_title_color"
                 android:id="@+id/btnUSA"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="MY" />
+                android:text="America" />
             <Button
-                app:backgroundTint="@color/black"
+                app:cornerRadius="100dp"
+                android:backgroundTint="@color/browser_actions_title_color"
                 android:id="@+id/btnVN"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="VN" />
+
+        </LinearLayout>
+        <LinearLayout
+            android:weightSum="30"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+
+            <Button
+                android:id="@+id/btnIndia"
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                app:cornerRadius="100dp"
+                android:backgroundTint="@color/browser_actions_title_color"
+                android:text="INDIA"
+                />
+
 
         </LinearLayout>
         <TextView
@@ -138,13 +129,14 @@
             android:textSize="25dp"
             android:textColor="@color/white"
             android:gravity="center"
-            android:background="@color/black"
+
             ></TextView>
 
         <androidx.recyclerview.widget.RecyclerView
+            android:numColumns="2"
             android:id="@+id/Rv_TheLoai"
             android:layout_width="match_parent"
-            android:layout_height="450dp"
+            android:layout_height="550dp"
             android:layout_marginLeft="10dp"
             android:layout_marginTop="6dp"
             android:layout_marginRight="8dp">

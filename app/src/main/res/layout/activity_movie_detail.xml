@@ -99,6 +99,39 @@
             app:layout_constraintTop_toTopOf="@+id/detail_movie_cover"
             tools:ignore="SpeakableTextPresentCheck" />
 
+        <LinearLayout
+
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/detail_movie_desc">
+
+            <Button
+                android:id="@+id/btnWatchMovie"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:layout_weight="1"
+                android:backgroundTint="#108BED"
+                android:onClick="watchMovie"
+                android:text="Xem Phim "
+                app:cornerRadius="100dp" />
+
+            <Button
+                android:id="@+id/btndownload"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:layout_weight="1"
+                android:backgroundTint="#108BED"
+                android:onClick="download"
+                android:text="Tải về "
+                app:cornerRadius="100dp" />
+        </LinearLayout>
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.core.widget.NestedScrollView>
