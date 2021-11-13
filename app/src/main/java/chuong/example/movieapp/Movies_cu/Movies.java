@@ -1,6 +1,7 @@
 package chuong.example.movieapp.Movies_cu;
 
 public class Movies {
+    private String Id;
     private String title;
     private String decription;
     private String thumbmail;
@@ -8,16 +9,29 @@ public class Movies {
     private String rating;
     private String streaminglink;
     private String converphoto;
+    private String Category;
+
+
+
+    public String getId() {
+        return Id;
+    }
+
+    public void setId(String id) {
+        Id = id;
+    }
 
     public Movies() {
     }
 
-    public Movies(String title, String decription, String thumbmail, String converphoto, String streaminglink) {
+    public Movies(String id,String title, String decription, String thumbmail, String converphoto, String streaminglink,String category) {
+        this.Id=id;
         this.title = title;
         this.decription = decription;
         this.thumbmail = thumbmail;
         this.streaminglink = streaminglink;
         this.converphoto = converphoto;
+        this.Category=category;
     }
 
     public String getTitle() {
@@ -74,5 +88,12 @@ public class Movies {
 
     public void setConverphoto(String converphoto) {
         this.converphoto = converphoto;
+    }
+    public String getCategory() {
+        return Category;
+    }
+
+    public void setCategory(String category) {
+        Category = category;
     }
 }

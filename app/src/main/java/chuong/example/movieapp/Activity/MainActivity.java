@@ -43,6 +43,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import chuong.example.movieapp.ListIDMovies.IDMovies;
+import chuong.example.movieapp.Login;
 import chuong.example.movieapp.Movies_cu.MovieAdapter;
 import chuong.example.movieapp.Movies_cu.MovieCategoryAdapter;
 import chuong.example.movieapp.Movies_cu.MovieItemClickListener;
@@ -50,40 +51,36 @@ import chuong.example.movieapp.Movies_cu.Movies;
 import chuong.example.movieapp.R;
 import chuong.example.movieapp.SlideMovies.SlideMovie;
 import chuong.example.movieapp.SlideMovies.SlideMovieAdapter;
-import chuong.example.movieapp.Slider_Cu.Slide;
-import chuong.example.movieapp.Slider_Cu.SliderPagerAdapter;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 
 
 import static com.example.lib.RetrofitClient.getRetrofit;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+
 
 
 public class MainActivity extends AppCompatActivity implements MovieItemClickListener, View.OnClickListener {
 
-    //private List<Slide> lstSlides;
-    private ArrayList<SlideMovie> lstSlideMovies;
+
+
     private ViewPager sliderPager;
     private TabLayout indicator;
     private RecyclerView MoviesRV,MoviesRVCategory;
-    //private TabItem tblTv,tblMovie,tblAnime,tblVideo;
+
     private Button btnAnime,btnChina,btnMy,btnVN,btnIndia;
-    private TextView txtcategory;
+    private TextView txtcategory,txtCast;
     SlideMovieAdapter adapterSlideMovies;
     List<Movies> lstMovies,listMoviesCategory,lstSlidesmovie ;
     MovieAdapter movieAdapter;
     MovieCategoryAdapter movieAdapterCategory;
     SearchView searchView;
-    IDMovies idMovies = new IDMovies();
-
-
 
     public static String Api_key="AIzaSyB7hA1R7YLrHQERL1J2IAtCbWijLvovrQA";
-    public static String Api_Web="https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId=";
-    //&maxResults=50
-    String get_Json_url=Api_Web+idMovies.getID_playlist()+"&key="+Api_key+"&maxResults=50";
-    String get_new=Api_Web+idMovies.getID_NewMovies()+"&key="+Api_key+"&maxResults=50";
-    String get_Movies=Api_Web+idMovies.getID_Movies()+"&key="+Api_key+"&maxResults=50";
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -124,113 +121,17 @@ public class MainActivity extends AppCompatActivity implements MovieItemClickLis
 
         txtcategory=findViewById(R.id.txtCategory);
 
-        //tblMovie=findViewById(R.id.tblMovie);
-        //tblTv=findViewById(R.id.tblTV);
-        //tblAnime=findViewById(R.id.tblAnime);
-        //tblVideo=findViewById(R.id.tblAnime);
+        txtCast=findViewById(R.id.txtCast);
+
+
+
+
 
 
 
     }
-    private void getJsonSlider(String Url){
-        RequestQueue requestQueue= Volley.newRequestQueue(this);
-        JsonObjectRequest jsonObjectRequest=new JsonObjectRequest(Request.Method.GET, Url, null,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-
-                        try {
-                            JSONArray jsonItems =response.getJSONArray("items");
-                            String title="";
-                            String url="";
-                            String idvieo="";
-                            String description="";
-                            for (int i=0;i<jsonItems.length();i++) {
-                                JSONObject jsonItem = jsonItems.getJSONObject(i);
-                                JSONObject jsonsnippet = jsonItem.getJSONObject("snippet");
-                                title = jsonsnippet.getString("title");
-
-                                JSONObject jsonThumbnails = jsonsnippet.getJSONObject("thumbnails");
-                                JSONObject jsonMedium = jsonThumbnails.getJSONObject("medium");
-                                url = jsonMedium.getString("url");
-                                JSONObject jsonResouceId = jsonsnippet.getJSONObject("resourceId");
-                                idvieo = jsonResouceId.getString("videoId");
-                                description = jsonsnippet.getString("description");
-                                //Toast.makeText(MainActivity.this, description, Toast.LENGTH_SHORT).show();
-                                lstSlidesmovie.add(new Movies(title,description,url,url,idvieo));
-                                //arrayListMovies.add(new MovieYoutube(title,url,idvieo));
-                            }
-                            adapterSlideMovies.notifyDataSetChanged();
-
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
 
 
-                        //Toast.makeText(MainActivity.this, response.toString(), Toast.LENGTH_SHORT).show();
-
-
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(MainActivity.this, "Loi", Toast.LENGTH_SHORT).show();
-                    }
-                }
-        );
-        requestQueue.add(jsonObjectRequest);
-    }
-
-    private void getJsonMovies(String Url,List<Movies> lstMovies,MovieAdapter movieAdapter){
-        RequestQueue requestQueue= Volley.newRequestQueue(this);
-        JsonObjectRequest jsonObjectRequest=new JsonObjectRequest(Request.Method.GET, Url, null,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-
-                        try {
-                            JSONArray jsonItems =response.getJSONArray("items");
-                            String title="";
-                            String url="";
-                            String idvieo="";
-                            String description="";
-                            for (int i=0;i<jsonItems.length();i++) {
-                                JSONObject jsonItem = jsonItems.getJSONObject(i);
-                                JSONObject jsonsnippet = jsonItem.getJSONObject("snippet");
-                                title = jsonsnippet.getString("title");
-
-                                JSONObject jsonThumbnails = jsonsnippet.getJSONObject("thumbnails");
-                                JSONObject jsonMedium = jsonThumbnails.getJSONObject("medium");
-                                url = jsonMedium.getString("url");
-                                JSONObject jsonResouceId = jsonsnippet.getJSONObject("resourceId");
-                                idvieo = jsonResouceId.getString("videoId");
-                                description = jsonsnippet.getString("description");
-                                //Toast.makeText(MainActivity.this, description, Toast.LENGTH_SHORT).show();
-                                lstMovies.add(new Movies(title,description,url,url,idvieo));
-                                //arrayListMovies.add(new MovieYoutube(title,url,idvieo));
-                            }
-                            movieAdapter.notifyDataSetChanged();
-
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-
-
-                        //Toast.makeText(MainActivity.this, response.toString(), Toast.LENGTH_SHORT).show();
-
-
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(MainActivity.this, "Loi", Toast.LENGTH_SHORT).show();
-                    }
-                }
-        );
-        requestQueue.add(jsonObjectRequest);
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -261,11 +162,13 @@ public class MainActivity extends AppCompatActivity implements MovieItemClickLis
     public void onMoviesClick(Movies movie, ImageView movieImageView) {
         Intent intent = new Intent(this, MovieDetailActivity.class);
         //set movie infomat to the
+        intent.putExtra("id",movie.getId());
         intent.putExtra("title",movie.getTitle());
         intent.putExtra("imgURL",movie.getThumbmail());
         intent.putExtra("imgCover",movie.getConverphoto());
         intent.putExtra("decription",movie.getDecription());
         intent.putExtra("streaminglink",movie.getStreaminglink());
+        intent.putExtra("category",movie.getCategory());
         //let crezate the animation
         ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(MainActivity.this,
                 movieImageView,"sharedName");
@@ -300,19 +203,29 @@ public class MainActivity extends AppCompatActivity implements MovieItemClickLis
             }
             break;
 
-            case R.id.btnVN:
-            {
-                txtcategory.setText("VIET NAM");
-                CreateRyclyViewCayegory("VN");
-            }
+
             case R.id.btnIndia:
             {
                 txtcategory.setText("INDIA");
                 CreateRyclyViewCayegory("India");
             }
             break;
+            case R.id.btnVN:
+            {
+                txtcategory.setText("VIET NAM");
+                CreateRyclyViewCayegory("VN");
+            }
+            break;
 
         }
+    }
+
+    public void logout(View view) {
+        FirebaseAuth.getInstance().signOut();
+        startActivity(new Intent(getApplicationContext(), Login.class));
+        finish();
+
+
     }
 
     class SliderTimer extends TimerTask {
@@ -383,55 +296,7 @@ public class MainActivity extends AppCompatActivity implements MovieItemClickLis
 
     }
 
-    private void getJsonMoviesCategory(String Url,List<Movies> lstMovies,MovieCategoryAdapter movieAdapter){
-        RequestQueue requestQueue= Volley.newRequestQueue(this);
-        JsonObjectRequest jsonObjectRequest=new JsonObjectRequest(Request.Method.GET, Url, null,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
 
-                        try {
-                            JSONArray jsonItems =response.getJSONArray("items");
-                            String title="";
-                            String url="";
-                            String idvieo="";
-                            String description="";
-                            for (int i=0;i<jsonItems.length();i++) {
-                                JSONObject jsonItem = jsonItems.getJSONObject(i);
-                                JSONObject jsonsnippet = jsonItem.getJSONObject("snippet");
-                                title = jsonsnippet.getString("title");
-
-                                JSONObject jsonThumbnails = jsonsnippet.getJSONObject("thumbnails");
-                                JSONObject jsonMedium = jsonThumbnails.getJSONObject("medium");
-                                url = jsonMedium.getString("url");
-                                JSONObject jsonResouceId = jsonsnippet.getJSONObject("resourceId");
-                                idvieo = jsonResouceId.getString("videoId");
-                                description = jsonsnippet.getString("description");
-                                //Toast.makeText(MainActivity.this, description, Toast.LENGTH_SHORT).show();
-                                lstMovies.add(new Movies(title,description,url,url,idvieo));
-                                //arrayListMovies.add(new MovieYoutube(title,url,idvieo));
-                            }
-                            movieAdapter.notifyDataSetChanged();
-
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-
-
-                        //Toast.makeText(MainActivity.this, response.toString(), Toast.LENGTH_SHORT).show();
-
-
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(MainActivity.this, "Loi", Toast.LENGTH_SHORT).show();
-                    }
-                }
-        );
-        requestQueue.add(jsonObjectRequest);
-    }
 
     public void getMovies(List<Movies> lstMovies,MovieAdapter movieAdapter){
         Methods methods = getRetrofit().create(Methods.class);
@@ -445,11 +310,13 @@ public class MainActivity extends AppCompatActivity implements MovieItemClickLis
                 for(MovieModel.Data dt: data){
 
                     //Movies movies = new Movies();
+                    String id=dt.getId();
                     String title=dt.getTitle();
                     String description=dt.getDescription();
                     String url=dt.getUrl().toString();
                     String idvieo=dt.getIdvieo();
-                    lstMovies.add(new Movies(title,description,url,url,idvieo));
+                    String category=dt.getTheloai();
+                    lstMovies.add(new Movies(id,title,description,url,url,idvieo,category));
                     //Toast.makeText(MainActivity.this, url, Toast.LENGTH_SHORT).show();
                     //textView.append(dt.getId()+dt.getName()+"\n");
                 }
@@ -470,16 +337,17 @@ public class MainActivity extends AppCompatActivity implements MovieItemClickLis
         call.enqueue(new Callback<MovieModel>() {
             @Override
             public void onResponse(Call<MovieModel> call, retrofit2.Response<MovieModel> response) {
-                Toast.makeText(MainActivity.this, "SUCCESS", Toast.LENGTH_LONG).show();
+                //Toast.makeText(MainActivity.this, "SUCCESS", Toast.LENGTH_LONG).show();
                 MovieModel.Data[] data = response.body().getData();
                 for(MovieModel.Data dt: data){
                     String category=dt.getTheloai();
                     if(theloai.equals(category)){
+                        String id=dt.getId();
                         String title=dt.getTitle();
                         String description=dt.getDescription();
                         String url=dt.getUrl().toString();
                         String idvieo=dt.getIdvieo();
-                        lstMovies.add(new Movies(title,description,url,url,idvieo));
+                        lstMovies.add(new Movies(id,title,description,url,url,idvieo,category));
                         //Toast.makeText(MainActivity.this, url, Toast.LENGTH_SHORT).show();
                     }
 
@@ -509,11 +377,14 @@ public class MainActivity extends AppCompatActivity implements MovieItemClickLis
                 int i=0;
                 for(MovieModel.Data dt: data){
                     if(i<soluong){
+
+                        String id=dt.getId();
                         String title=dt.getTitle();
                         String description=dt.getDescription();
                         String url=dt.getUrl().toString();
                         String idvieo=dt.getIdvieo();
-                        lstSlidesmovie.add(new Movies(title,description,url,url,idvieo));
+                        String category=dt.getTheloai();
+                        lstSlidesmovie.add(new Movies(id,title,description,url,url,idvieo,category));
                         i=i+1;
                     }
                     //Movies movies = new Movies();

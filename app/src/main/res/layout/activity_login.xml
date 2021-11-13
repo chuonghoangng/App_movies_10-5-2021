@@ -56,6 +56,8 @@
         tools:ignore="TouchTargetSizeCheck" />
 
     <Button
+        app:cornerRadius="100dp"
+        android:backgroundTint="#108BED"
         android:id="@+id/Loginbtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

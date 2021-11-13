@@ -101,6 +101,7 @@
 
         <LinearLayout
 
+            android:id="@+id/linearLayout"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="30dp"
@@ -131,6 +132,50 @@
                 android:text="Tải về "
                 app:cornerRadius="100dp" />
         </LinearLayout>
+
+        <TextView
+            android:padding="5dp"
+            android:layout_marginLeft="10dp"
+            android:id="@+id/txtCast"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Cast"
+            android:textColor="@color/white"
+            android:textSize="20dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/Rv_Cast"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/txtCast" />
+
+        <TextView
+            android:padding="5dp"
+            android:layout_marginLeft="10dp"
+            android:id="@+id/txtMovieAs"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:text="Movies of the same genre "
+            android:textColor="@color/white"
+            android:textSize="20dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/Rv_Cast" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/Rv_MovisAs"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/txtMovieAs" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

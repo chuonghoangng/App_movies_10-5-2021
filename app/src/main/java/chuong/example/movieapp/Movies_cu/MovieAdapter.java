@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import chuong.example.movieapp.Activity.MovieDetailActivity;
 import chuong.example.movieapp.R;
 
 public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MyViewHolder> implements Filterable {
@@ -40,6 +41,8 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MyViewHolder
         this.movieItemClickListener = movieItemClickListener;
         this.layout = layout;
     }
+
+
 
     @NonNull
     @Override
