@@ -19,6 +19,8 @@ import android.util.SparseArray;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -26,6 +28,10 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.example.lib.InterfaceRepository.Methods;
 import com.example.lib.Model.CastModel;
+import com.example.lib.Model.CommentInsert;
+import com.example.lib.Model.CommentModel;
+import com.example.lib.Model.CommentResponse;
+import com.example.lib.Model.EpisodeModel;
 import com.example.lib.Model.MovieModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -37,6 +43,11 @@ import at.huber.youtubeExtractor.YouTubeExtractor;
 import at.huber.youtubeExtractor.YtFile;
 import chuong.example.movieapp.Cast.Cast;
 import chuong.example.movieapp.Cast.CastAdapter;
+import chuong.example.movieapp.Comment.Comment;
+import chuong.example.movieapp.Comment.CommentAdapter;
+import chuong.example.movieapp.Episode.Episode;
+import chuong.example.movieapp.Episode.EpisodeAdapter;
+import chuong.example.movieapp.Episode.EpisodeItemClickListener;
 import chuong.example.movieapp.Movies_cu.MovieAdapter;
 import chuong.example.movieapp.Movies_cu.MovieItemClickListener;
 import chuong.example.movieapp.Movies_cu.Movies;
@@ -45,16 +56,26 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MovieDetailActivity extends AppCompatActivity implements MovieItemClickListener {
+public class MovieDetailActivity extends AppCompatActivity implements MovieItemClickListener, EpisodeItemClickListener {
 
     private ImageView MovieThumbnailImg,MovieCoverImg;
     private TextView tv_title,tv_description;
     private FloatingActionButton play_fab;
     //RV CAST
-    private RecyclerView CastRV,MoviesAsRv;
+    private RecyclerView CastRV,MoviesAsRv,DanhsachtapphimRV,CommentRV;
     private List<Cast> castList;
     private CastAdapter castAdapter;
+    //RV danh sach tap phim
+    private List<Episode> episodeList;
+    private EpisodeAdapter episodeAdapter;
     private List<Movies> lstMoviesAs;
+    //RV danh sach binh luan
+    private List<Comment> commentList;
+    private CommentAdapter commentAdapter;
+    private EditText edtTen,edtNoidung;
+    private Button btnaddcomment;
+
+
     MovieAdapter movieasAdapter;
     // Nhan du lieu tu trang Home
     String link ;
@@ -70,6 +91,9 @@ public class MovieDetailActivity extends AppCompatActivity implements MovieItemC
         inViews();
         setupRvCast();
         SetupRVMoviesAs();
+        setupRvEpisode();
+        setupRvComment();
+
 
 
     }
@@ -77,6 +101,8 @@ public class MovieDetailActivity extends AppCompatActivity implements MovieItemC
         CastRV=findViewById(R.id.Rv_Cast);
         MoviesAsRv=findViewById(R.id.Rv_MovisAs);
         play_fab=findViewById(R.id.play_fab);
+        DanhsachtapphimRV = findViewById(R.id.danhsachtap);
+        CommentRV=findViewById(R.id.Rv_Comment);
         //get the data
         id = getIntent().getExtras().getString("id");
         movieTitle = getIntent().getExtras().getString("title");
@@ -100,8 +126,43 @@ public class MovieDetailActivity extends AppCompatActivity implements MovieItemC
         //set up animetion
         MovieCoverImg.setAnimation(AnimationUtils.loadAnimation(this,R.anim.scale_animation));
         play_fab.setAnimation(AnimationUtils.loadAnimation(this,R.anim.scale_animation));
+        //comment
+        edtTen=findViewById(R.id.edtName);
+        edtNoidung=findViewById(R.id.edtComment);
+        btnaddcomment=findViewById(R.id.btnAddComment);
+        btnaddcomment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Methods methods = getRetrofit().create(Methods.class);
+                CommentInsert comment= new CommentInsert();
+                comment.setTen(edtTen.getText().toString());
+                comment.setBinhluan(edtNoidung.getText().toString());
+                comment.setMovieId(id);
 
 
+
+                Call<CommentResponse> call = methods.insertComment(comment);
+                commentAdapter.notifyDataSetChanged();
+                CommentRV.setAdapter(commentAdapter);
+                call.enqueue(new Callback<CommentResponse>() {
+                    @Override
+                    public void onResponse(Call<CommentResponse> call, Response<CommentResponse> response) {
+                        setupRvComment();
+                        edtTen.setText("");
+                        edtNoidung.setText("");
+                        Toast.makeText(MovieDetailActivity.this, "Comment Success", Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onFailure(Call<CommentResponse> call, Throwable t) {
+                        Toast.makeText(MovieDetailActivity.this, "Comment Error", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+
+
+            }
+        });
 
         MovieCoverImg.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -112,6 +173,8 @@ public class MovieDetailActivity extends AppCompatActivity implements MovieItemC
                 startActivity(intent);
             }
         });
+
+
 
 
     }
@@ -153,6 +216,53 @@ public class MovieDetailActivity extends AppCompatActivity implements MovieItemC
         CastRV.setAdapter(castAdapter);
         RecyclerView.ItemDecoration itemDecoration = new DividerItemDecoration(this,DividerItemDecoration.HORIZONTAL);
         CastRV.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false));
+
+    }
+
+    public void setupRvEpisode(){
+        //tao trang hien thi danh sach phim
+        episodeList = new ArrayList<>();
+        episodeAdapter = new EpisodeAdapter(this,episodeList,R.layout.item_episode,this);
+        //getJsonMovies(get_Movies,lstMovies,movieAdapter);
+        getEpisodes(episodeList,episodeAdapter);
+        DanhsachtapphimRV.setAdapter(episodeAdapter);
+        RecyclerView.ItemDecoration itemDecoration = new DividerItemDecoration(this,DividerItemDecoration.HORIZONTAL);
+        DanhsachtapphimRV.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false));
+
+    }
+
+    private void getEpisodes(List<Episode> castList, EpisodeAdapter castAdapter) {
+        Methods methods = getRetrofit().create(Methods.class);
+        Call<EpisodeModel> call = methods.getEpisodes();
+        //lstMovies=new ArrayList<>();
+        call.enqueue(new Callback<EpisodeModel>() {
+            @Override
+            public void onResponse(Call<EpisodeModel> call, Response<EpisodeModel> response) {
+                EpisodeModel.Data[] data = response.body().getData();
+                for(EpisodeModel.Data dt: data){
+                    String id2=dt.getMovieId();
+                    if(id.equals(id2)){
+                        String idepisode=dt.getId();
+                        String sotap=dt.getEpisodeNumber().toString();
+
+                        String url=dt.getUrl().toString();
+
+                        episodeList.add(new Episode(id2,idepisode,sotap,url));
+                        //Toast.makeText(MovieDetailActivity.this, url, Toast.LENGTH_SHORT).show();
+                    }
+
+                    //Movies movies = new Movies();
+
+                    //textView.append(dt.getId()+dt.getName()+"\n");
+                }
+                episodeAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onFailure(Call<EpisodeModel> call, Throwable t) {
+                Toast.makeText(MovieDetailActivity.this, "ERROR DANH SACH TAP PHIM", Toast.LENGTH_LONG).show();
+            }
+        });
 
     }
 
@@ -260,6 +370,65 @@ public class MovieDetailActivity extends AppCompatActivity implements MovieItemC
             @Override
             public void onFailure(Call<MovieModel> call, Throwable t) {
                 Toast.makeText(MovieDetailActivity.this, "ERROR", Toast.LENGTH_LONG).show();
+            }
+        });
+
+    }
+
+    @Override
+    public void onEpisodesClick(Episode episode, TextView txt) {
+        Intent intent = new Intent(MovieDetailActivity.this, XemMovie.class);
+        Toast.makeText(MovieDetailActivity.this,episode.getUrl() , Toast.LENGTH_SHORT).show();
+
+        intent.putExtra("streaminglink",episode.getUrl());
+        startActivity(intent);
+
+    }
+
+    public void setupRvComment(){
+        //tao trang hien thi danh sach phim
+        commentList = new ArrayList<>();
+        commentAdapter = new CommentAdapter(this,commentList,R.layout.item_comment);
+        //getJsonMovies(get_Movies,lstMovies,movieAdapter);
+        getComment(commentList,commentAdapter);
+        CommentRV.setAdapter(commentAdapter);
+        RecyclerView.ItemDecoration itemDecoration = new DividerItemDecoration(this,DividerItemDecoration.VERTICAL);
+        CommentRV.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false));
+
+    }
+
+    private void getComment(List<Comment> commentList, CommentAdapter commentAdapter) {
+        Methods methods = getRetrofit().create(Methods.class);
+        Call<CommentModel> call = methods.getComments();
+        //lstMovies=new ArrayList<>();
+        call.enqueue(new Callback<CommentModel>() {
+            @Override
+            public void onResponse(Call<CommentModel> call, Response<CommentModel> response) {
+                CommentModel.Data[] data = response.body().getData();
+                for(CommentModel.Data dt: data){
+                    String id2=dt.getMovieId();
+                    if(id.equals(id2)){
+                        String ten=dt.getTen();
+                        String noidung=dt.getBinhluan().toString();
+
+                        String moviedId=dt.getMovieId().toString();
+
+                        commentList.add(new Comment(ten,noidung,moviedId));
+                        //Toast.makeText(MovieDetailActivity.this, url, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MovieDetailActivity.this, "Binh luan thanh cong "+ten+noidung, Toast.LENGTH_LONG).show();
+                    }
+
+                    //Movies movies = new Movies();
+
+                    //textView.append(dt.getId()+dt.getName()+"\n");
+                }
+                commentAdapter.notifyDataSetChanged();
+
+            }
+
+            @Override
+            public void onFailure(Call<CommentModel> call, Throwable t) {
+                Toast.makeText(MovieDetailActivity.this, "ERROR Binh luan ", Toast.LENGTH_LONG).show();
             }
         });
 

@@ -21,11 +21,15 @@
         android:theme="@style/Theme.MovieApp"
         android:usesCleartextTraffic="true">
         <activity
-            android:name=".downloadvideo"
+            android:name=".Activity.xemphim2"
             android:exported="true" >
 
 
+
         </activity>
+        <activity
+            android:name=".downloadvideo"
+            android:exported="true" />
         <activity
             android:name=".Register"
             android:exported="true">
@@ -35,23 +39,15 @@
         </activity>
         <activity
             android:name=".Login"
-            android:exported="true">
-
-
-        </activity>
+            android:exported="true" />
         <activity
             android:name=".Activity.XemMovie"
-            android:exported="true"
             android:configChanges="orientation|screenSize"
-            />
+            android:exported="true" />
         <activity
             android:name=".Activity.MovieDetailActivity"
-            android:exported="true"></activity>
-
-
-        <activity android:name=".Activity.MainActivity"
-
-            >
+            android:exported="true" />
+        <activity android:name=".Activity.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".Login" />
@@ -60,7 +56,6 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
 
         </activity>
 
